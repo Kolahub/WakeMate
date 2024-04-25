@@ -393,10 +393,18 @@ input[type=file]::file-selector-button {
     align-items: start;
   }
 
+  .edit-typo { 
+    align-self: end;
+  }
+
   .choosen-audio {
     flex-direction: column;
     align-items: start;
     /* justify-content: ;
     margin-bottom: 1rem; */
+  }
+
+  .choosen-audio-text {
+    font-size: 2rem;
   }
 }

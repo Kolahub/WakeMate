@@ -197,7 +197,7 @@ setAlarm.addEventListener("click", function (e) {
   updateDetails(historyArr);
   alarmName.value = ''
   alarmTime.value = '';
-  console.log(historyArr)
+  console.log(obj)
 });
 
 // const delBtn = document.querySelectorAll('.del-btn')
