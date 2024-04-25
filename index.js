@@ -56,7 +56,7 @@ const homePage = function () {
 btnCancel.addEventListener('click', homePage)
 
 //When your alarm time is due, this function shows alarm message
-const timeout = function(obj, label, id, audio) {
+const timeout = function(obj) {
   timeoutBox.innerHTML = '';
   //checks if an alarm is currently playing, if true the audio stop and the alarm is cleared
   if (currentAlarmAudioPlaying) {
@@ -66,7 +66,7 @@ const timeout = function(obj, label, id, audio) {
   }
 
         // Play the audio immediately
-        const audioElement = new Audio(audio);
+        const audioElement = new Audio(obj.audio);
         audioElement.loop = true;
         audioElement.play()
           .then(() => {
@@ -80,7 +80,7 @@ const timeout = function(obj, label, id, audio) {
   let content = `<div class="timeout-overlay">
     <div class="timeout-box">
       <div class="timeout-comp">
-        <h1>${label ? label : 'Alarm'}</h1>
+        <h1>${obj.label ? obj.label : 'Alarm'}</h1>
         <div class="btn-snooze">Snooze</div>
       </div>
       <div class="btn-stop">Stop</div>
@@ -108,7 +108,7 @@ const timeout = function(obj, label, id, audio) {
  
  //Snooze alarm buttton
  snoozeBtn.addEventListener('click', function () {
-  snooze(label, id, audio)
+  snooze(obj)
   clearMsg()
 })
  
@@ -117,7 +117,7 @@ const timeout = function(obj, label, id, audio) {
   clearMsg()
 })
 
-currentAlarmAudioPlaying = audio;
+currentAlarmAudioPlaying = obj.audio;
 }
 
 // compare each in the historyArr current time with alarm time
@@ -130,9 +130,8 @@ function timer(arr) {
       const [alarmHour, alarmMin] = ev.time.split(':')  
       if(Number(curHours) === Number(alarmHour)  && Number(curMin) === Number(alarmMin)) {
           if(ev.stopOrSnoozeBtnClicked) return;
-          timeout(ev, ev.label, ev.id, ev.audio)
+          timeout(ev)
           clearInterval(setAlarm)
-          console.log(ev)
       }
     }, 1000)
   })
@@ -158,9 +157,9 @@ const updateDetails = function (arr) {
 }
 
 //Snoozing function 
-function snooze (label, id, aud) {
-let timeMin = 2;
-let timeSec = 60;
+function snooze (obj) {
+let timeMin = 1;
+let timeSec = 10;
 const snoozeHtml = document.querySelectorAll('.snoozed')
   const snoozeInt = setInterval(function () {
     timeSec--
@@ -173,11 +172,11 @@ const snoozeHtml = document.querySelectorAll('.snoozed')
     }
 
     if (timeMin === 0 && timeSec === 60) {
-      timeout(label, id, aud)
+      timeout(obj)
       clearInterval(snoozeInt)
     }
     snoozeHtml.forEach(ev => {
-      if (id === ev.dataset.snoozeid) {
+      if (obj.id === ev.dataset.snoozeid) {
         ev.innerHTML = `Snoozed: ${min}:${sec}`
         console.log(`Snoozed: ${min}:${sec}`)
       }
